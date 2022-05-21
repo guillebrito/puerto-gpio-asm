@@ -24,6 +24,8 @@ defun Pin_init
     // R0: self, R1: puerto, R2: numPin
     str R1,[R0,#Pin__puerto]
     str R2,[R0,#Pin__numero]
+
+    
     bx lr
 endfun Pin_init
 
@@ -33,9 +35,14 @@ endfun Pin_init
 .set ODR,0x0C
 .set BSRR,0x10
 .set BRR,0x14
+.set MASCARA_BITS_CONFIG, 0xF
 
 defun Pin_configura
     // R0: self, R1: config
+    ldr R2,[R0,#Pin__puerto]
+    ldr R3,[R0,#Pin__numero]
+    ldr R0,[R2,#CRL]
+
     bx lr
 endfun Pin_configura
 
