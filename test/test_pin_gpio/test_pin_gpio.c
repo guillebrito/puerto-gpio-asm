@@ -112,6 +112,6 @@ int main(void)
     RUN_TEST(configura_entrada_pullUp);
     RUN_TEST(configura_entrada_pullDown);
     RUN_TEST(lee_entrada);
-    // RUN_TEST(lee_valor_salida);
+    RUN_TEST(lee_valor_salida);
     return UNITY_END();   
 }
