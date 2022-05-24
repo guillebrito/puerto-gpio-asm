@@ -38,7 +38,7 @@ endfun Pin_init
 defun Pin_configura
     // R0: self, R1: config
     push {R4-R6,LR}
-    ldr R2,[R0,#Pin__puerto]
+    ldr R2,[R0,#Pin__puerto]      
     ldr R3,[R0,#Pin__numero]   
     mov R12,R1
     movs R6,#CRL
@@ -77,13 +77,13 @@ defun Pin_escribe
     // R0: self, R1: valor
     ldr R2,[R0,#Pin__puerto]
     ldr R3,[R0,#Pin__numero]
-    cmp R1,#0
-    mov R1,#BRR
-    beq 0f
-    movs R1,#BSRR
+    cmp R1,#0       //comparo R1
+    mov R1,#BRR     //escribo BRR en R1 por defecto
+    beq 0f          //si fue R1=0 no modifico R1=BRR
+    movs R1,#BSRR   //si fue R1=1 modifico R1=BSRR
 0:  movs R0,#1
-    lsls R0,R3
-    str R0,[R2,R1]
+    lsls R0,R3      //coloco un 1 en el bit correspondiente al pin
+    str R0,[R2,R1]  //Seteo o reseteo dicho pin segun R1
     bx lr
 endfun Pin_escribe
 
@@ -92,11 +92,11 @@ defun Pin_lee
     ldr R2,[R0,#Pin__puerto]
     ldr R3,[R0,#Pin__numero]
     ldr R0,[R2,#IDR]   
-    movs R1,#1
-    lsls R1,R3
-    ands R0,R1
-    lsrs R0,R3
-    bx lr
+    movs R1,#1           //pongo un 1 en R1 
+    lsls R1,R3           //lo desplazo a la izq el num de pin correspondiente
+    ands R0,R1           //realizo op and     
+    lsrs R0,R3           //desplazo a la der el num de pin
+    bx lr                //R0 tiene el valor de la lectura efectuada
     // R0: valor
 endfun Pin_lee
 defun Pin_leeSalida
@@ -104,7 +104,7 @@ defun Pin_leeSalida
     ldr R2,[R0,#Pin__puerto]
     ldr R3,[R0,#Pin__numero]
     ldr R0,[R2,#ODR]   
-    movs R1,#1
+    movs R1,#1           //Idem anterior
     lsls R1,R3
     ands R0,R1
     lsrs R0,R3
