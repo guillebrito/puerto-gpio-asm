@@ -39,7 +39,8 @@ defun Pin_configura
     // R0: self, R1: config
     push {R4-R6,LR}
     ldr R2,[R0,#Pin__puerto]
-    ldr R3,[R0,#Pin__numero]
+    ldr R3,[R0,#Pin__numero]   
+    mov R12,R1
     movs R6,#CRL
     cmp R3,#7  
     bls 0f
@@ -54,7 +55,20 @@ defun Pin_configura
     lsls R1,R3
     orrs R4,R1
     str  R4,[R2,R6]
-    pop {R4-R6,PC}
+    cmp R12,#8
+    bne 0f
+    movs R1,#0
+    bl Pin_escribe
+0:  cmp R12,#24
+    bne 0f
+    movs R1,#1
+    bl Pin_escribe    
+   //  ands R12,R1,#MASCARA_BITS_CONFIG
+   //  cmp R12,#8         //Pregunta si los primeros 4 bits son correspondientes a pull up o dn
+   //  bne 0f
+   //  ubfx R1,R1,#4,#1 //Extrae de R1 un bit de la pos. 4 y lo guarda en R12
+   //  bl Pin_escribe
+0:  pop {R4-R6,PC}
 endfun Pin_configura
 
 
