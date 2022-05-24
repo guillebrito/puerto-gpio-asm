@@ -24,8 +24,6 @@ defun Pin_init
     // R0: self, R1: puerto, R2: numPin
     str R1,[R0,#Pin__puerto]
     str R2,[R0,#Pin__numero]
-
-    
     bx lr
 endfun Pin_init
 
@@ -39,17 +37,39 @@ endfun Pin_init
 
 defun Pin_configura
     // R0: self, R1: config
+    push {R4-R6,LR}
     ldr R2,[R0,#Pin__puerto]
     ldr R3,[R0,#Pin__numero]
-    ldr R0,[R2,#CRL]
-
-    bx lr
+    movs R6,#CRL
+    cmp R3,#7  
+    bls 0f
+    movs R6,#CRH
+    subs R3,#8
+0:  ldr R4,[R2,R6]
+    movs R5,#MASCARA_BITS_CONFIG
+    lsls R3,#2
+    lsls R5,R3
+    bics R4,R5
+    ands R1,#MASCARA_BITS_CONFIG
+    lsls R1,R3
+    orrs R4,R1
+    str  R4,[R2,R6]
+    pop {R4-R6,PC}
 endfun Pin_configura
 
 
 
 defun Pin_escribe
     // R0: self, R1: valor
+    ldr R2,[R0,#Pin__puerto]
+    ldr R3,[R0,#Pin__numero]
+    cmp R1,#0
+    mov R1,#BRR
+    beq 0f
+    movs R1,#BSRR
+0:  movs R0,#1
+    lsls R0,R3
+    str R0,[R2,R1]
     bx lr
 endfun Pin_escribe
 
