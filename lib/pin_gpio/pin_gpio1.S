@@ -89,6 +89,13 @@ endfun Pin_escribe
 
 defun Pin_lee
     // R0: self
+    ldr R2,[R0,#Pin__puerto]
+    ldr R3,[R0,#Pin__numero]
+    ldr R0,[R2,#IDR]   
+    movs R1,#1
+    lsls R1,R3
+    ands R0,R1
+    lsrs R0,R3
     bx lr
     // R0: valor
 endfun Pin_lee
